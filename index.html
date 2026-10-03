@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07070B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>JFX_REALD TRAD</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#07070B;
+    --panel:#0D0E14;
+    --garis:#1E2029;
+    --teks:#F2F3F7;
+    --redup:#8A8FA3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    min-height:100vh;
+    min-height:100dvh;
+    background:var(--bg);color:var(--teks);
+    font-family:'Space Grotesk',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:transparent;
+    overflow-x:hidden;
+    display:flex;flex-direction:column;
+  }
+  a{color:inherit;text-decoration:none;touch-action:manipulation}
+  ::selection{background:#FFC400;color:#07070B}
+
+  /* ---- latar ---- */
+  .grid-bg{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+    background-size:52px 52px;
+    mask-image:radial-gradient(ellipse 90% 75% at 50% 45%,#000 30%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 75% at 50% 45%,#000 30%,transparent 100%);
+  }
+  .amb{position:fixed;z-index:0;pointer-events:none;border-radius:50%}
+  .amb.kiri{width:80vw;height:80vw;left:-30vw;top:18%;
+    background:radial-gradient(circle,rgba(255,196,0,.07),transparent 65%)}
+  .amb.kanan{width:80vw;height:80vw;right:-30vw;top:18%;
+    background:radial-gradient(circle,rgba(46,155,255,.08),transparent 65%)}
+
+  /* ---- panggung ---- */
+  .panggung{
+    position:relative;z-index:1;flex:1;
+    width:100%;max-width:880px;margin:0 auto;
+    padding:clamp(16px,3vh,36px) 20px calc(8px + env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;justify-content:center;
+    gap:clamp(16px,3.2vh,30px);
+  }
+
+  /* ---- judul ---- */
+  header{text-align:center}
+  h1{
+    font-family:'Unbounded',sans-serif;font-weight:900;
+    font-size:clamp(24px,7.5vw,52px);letter-spacing:.01em;line-height:1.12;
+    text-shadow:0 0 28px rgba(240,243,247,.22),0 0 90px rgba(240,243,247,.1);
+  }
+  h1 .kursor{color:var(--redup);font-weight:500;animation:kedip 1.1s steps(1) infinite}
+  @keyframes kedip{50%{opacity:0}}
+
+  .mikro{
+    display:flex;align-items:center;gap:14px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.34em;text-transform:uppercase;color:var(--redup);
+  }
+  .mikro::before,.mikro::after{content:'';flex:1;height:1px;background:var(--garis)}
+
+  /* ---- panel broker ---- */
+  .panel-grid{display:grid;grid-template-columns:1fr;gap:14px}
+
+  .panel{
+    position:relative;display:flex;flex-direction:column;
+    min-height:clamp(140px,21vh,290px);
+    background:var(--panel);
+    border:1px solid var(--brand-line);
+    padding:clamp(16px,4vw,26px);
+    overflow:hidden;
+    transition:transform .25s ease,box-shadow .35s ease,border-color .35s ease;
+    will-change:transform;
+  }
+  .panel.kuning{--brand:#FFC400;--brand-line:rgba(255,196,0,.42);--brand-soft:rgba(255,196,0,.10)}
+  .panel.biru  {--brand:#2E9BFF;--brand-line:rgba(46,155,255,.45);--brand-soft:rgba(46,155,255,.10)}
+
+  .panel.kuning{box-shadow:0 0 46px -20px rgba(255,196,0,.55),inset 0 0 34px -22px rgba(255,196,0,.4)}
+  .panel.biru  {box-shadow:0 0 46px -20px rgba(46,155,255,.6),inset 0 0 34px -22px rgba(46,155,255,.4)}
+  @media (hover:hover){
+    .panel.kuning:hover{box-shadow:0 0 80px -14px rgba(255,196,0,.85),inset 0 0 44px -18px rgba(255,196,0,.5);border-color:rgba(255,196,0,.85)}
+    .panel.biru:hover  {box-shadow:0 0 80px -14px rgba(46,155,255,.9),inset 0 0 44px -18px rgba(46,155,255,.5);border-color:rgba(46,155,255,.9)}
+    .panel.kuning:hover .nama{color:var(--brand);text-shadow:0 0 26px rgba(255,196,0,.75)}
+    .panel.biru:hover  .nama{color:var(--brand);text-shadow:0 0 26px rgba(46,155,255,.8)}
+    .panel:hover .panah{border-color:var(--brand);color:var(--brand);transform:translate(3px,-3px)}
+    .panel:hover .spot{opacity:1}
+  }
+  .panel:active{transform:scale(.975)}
+  .panel.kuning:active{box-shadow:0 0 80px -14px rgba(255,196,0,.9);border-color:rgba(255,196,0,.9)}
+  .panel.biru:active  {box-shadow:0 0 80px -14px rgba(46,155,255,.95);border-color:rgba(46,155,255,.95)}
+  .panel:active .nama{color:var(--brand)}
+
+  .panel .spot{
+    position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s;
+    background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),var(--brand-soft),transparent 70%);
+  }
+
+  .atas{display:flex;justify-content:space-between;align-items:flex-start}
+  .emblem{
+    width:clamp(50px,13vw,66px);height:clamp(50px,13vw,66px);
+    display:grid;place-items:center;
+    border:1px solid var(--brand-line);background:var(--brand-soft);color:var(--brand);
+    box-shadow:0 0 26px -8px var(--brand);
+  }
+  .emblem svg{width:56%;height:56%}
+  .panah{
+    width:38px;height:38px;display:grid;place-items:center;
+    border:1px solid var(--garis);color:var(--redup);
+    transition:border-color .3s,color .3s,transform .3s;
+  }
+  .panah svg{width:15px;height:15px}
+
+  .nama{
+    margin-top:auto;
+    font-family:'Unbounded',sans-serif;font-weight:700;
+    font-size:clamp(20px,5.6vw,34px);letter-spacing:.04em;line-height:1;
+    transition:color .3s,text-shadow .3s;
+  }
+  .spark{display:block;width:100%;height:clamp(34px,5vh,48px);margin-top:12px;opacity:.95}
+
+  /* ---- live chat ---- */
+  .chat-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .tombol{
+    position:relative;display:flex;align-items:center;justify-content:center;gap:10px;
+    min-height:52px;
+    padding:14px 12px;background:var(--panel);border:1px solid var(--garis);
+    font-weight:600;font-size:clamp(13px,3.4vw,15px);letter-spacing:.02em;
+    transition:border-color .3s,box-shadow .3s,transform .3s;
+  }
+  .tombol svg{width:18px;height:18px;flex:none}
+  .tombol .dot{
+    position:absolute;top:9px;right:11px;width:7px;height:7px;border-radius:50%;
+    background:#2BD576;box-shadow:0 0 9px #2BD576;animation:denyut 1.6s ease infinite;
+  }
+  @keyframes denyut{50%{opacity:.25}}
+  .tombol.wa{color:#25D366}
+  .tombol.tg{color:#2AABEE}
+  .tombol span.teks{color:var(--teks)}
+  @media (hover:hover){
+    .tombol.wa:hover{border-color:rgba(37,211,102,.65);box-shadow:0 0 38px -10px rgba(37,211,102,.6);transform:translateY(-2px)}
+    .tombol.tg:hover{border-color:rgba(42,171,238,.65);box-shadow:0 0 38px -10px rgba(42,171,238,.6);transform:translateY(-2px)}
+  }
+  .tombol:active{transform:scale(.96)}
+  .tombol.wa:active{border-color:rgba(37,211,102,.65);box-shadow:0 0 38px -10px rgba(37,211,102,.6)}
+  .tombol.tg:active{border-color:rgba(42,171,238,.65);box-shadow:0 0 38px -10px rgba(42,171,238,.6)}
+
+  /* ---- bawah: email & instagram ---- */
+  footer{
+    position:relative;z-index:1;
+    display:flex;justify-content:center;align-items:center;
+    gap:clamp(20px,6vw,60px);flex-wrap:wrap;
+    padding:16px 20px calc(18px + env(safe-area-inset-bottom));
+  }
+  footer a{
+    display:flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:clamp(11px,3vw,12px);letter-spacing:.05em;
+    color:var(--redup);transition:color .3s,text-shadow .3s;
+    min-height:32px;
+  }
+  footer a svg{width:15px;height:15px;flex:none}
+  footer a:active{color:var(--teks)}
+  @media (hover:hover){footer a:hover{color:var(--teks);text-shadow:0 0 16px rgba(240,243,247,.55)}}
+
+  /* ══════════ TATA LETAK HP ══════════ */
+  @media (max-width:639px){
+    body.hp-samping .panel-grid{grid-template-columns:1fr 1fr;gap:12px}
+    body.hp-samping .panel{min-height:clamp(170px,26vh,220px);padding:14px 12px}
+    body.hp-samping .nama{font-size:clamp(15px,4.4vw,20px)}
+    body.hp-samping .emblem{width:44px;height:44px}
+    body.hp-samping .panah{width:28px;height:28px}
+    body.hp-samping .spark{height:30px;margin-top:8px}
+  }
+
+  @media (orientation:landscape) and (max-height:520px){
+    .panel-grid{grid-template-columns:1fr 1fr}
+    .panggung{gap:14px;padding-top:14px;padding-bottom:14px}
+    h1{font-size:clamp(20px,4.5vw,30px)}
+    .panel{min-height:150px}
+    .spark{height:32px}
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="amb kiri" aria-hidden="true"></div>
+<div class="amb kanan" aria-hidden="true"></div>
+
+<div class="panggung">
+
+  <header>
+    <h1>JFX_REALD TRAD<span class="kursor">_</span></h1>
+  </header>
+
+  <div class="mikro">Pilih Broker</div>
+  <div class="panel-grid">
+
+    <!-- KIRI / ATAS : EXNESS (kuning) -->
+    <a class="panel kuning" id="btnExness" href="https://one.exnessonelink.com/a/nirxo7wxuu" target="_blank" rel="noopener noreferrer" aria-label="Daftar Exness">
+      <div class="spot"></div>
+      <div class="atas">
+        <span class="emblem">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M15 9h19v7.5H23v5h10V29H23v5.5h11V42H15z" fill="currentColor"/>
+            <path d="M9 9h3.5v33H9z" fill="currentColor" opacity=".3"/>
+          </svg>
+        </span>
+        <span class="panah">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <h2 class="nama">EXNESS</h2>
+      <canvas class="spark" aria-hidden="true"></canvas>
+    </a>
+
+    <!-- KANAN / BAWAH : VALETAX (biru) -->
+    <a class="panel biru" id="btnValetax" href="https://ma.valetax.com/p/6037979" target="_blank" rel="noopener noreferrer" aria-label="Daftar Valetax">
+      <div class="spot"></div>
+      <div class="atas">
+        <span class="emblem">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M10 9h7.5L24 32 30.5 9H38L28 42h-8z" fill="currentColor"/>
+            <circle cx="40" cy="10" r="2.6" fill="currentColor" opacity=".55"/>
+          </svg>
+        </span>
+        <span class="panah">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <h2 class="nama">VALETAX</h2>
+      <canvas class="spark" aria-hidden="true"></canvas>
+    </a>
+  </div>
+
+  <div class="mikro">Live Chat</div>
+  <div class="chat-row">
+    <a class="tombol wa" id="kWa" href="https://wa.me/628774262862?text=Halo%20admin%20JFX_REALD%20TRAD%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      <span class="teks">WhatsApp</span>
+      <i class="dot"></i>
+    </a>
+    <a class="tombol tg" id="kTg" href="https://t.me/Scalper_syariah" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <span class="teks">Telegram</span>
+      <i class="dot"></i>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <a href="mailto:jpxrealtrad@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="1"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>jpxrealtrad@gmail.com</a>
+  <a href="https://instagram.com/scalper_jfx" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"/></svg>@scalper_jfx</a>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════
+   KONFIGURASI — semua link sudah terisi.
+   tataLetakHp: "tumpuk" (HP: Exness atas, Valetax bawah)
+                atau "samping" (HP: tetap kiri-kanan)
+   ════════════════════════════════════════════ */
+const KONFIG = {
+  tataLetakHp: "tumpuk",
+  exness : "https://one.exnessonelink.com/a/nirxo7wxuu",
+  valetax: "https://ma.valetax.com/p/6037979",
+  wa     : "628774262862",
+  waPesan: "Halo admin JFX_REALD TRAD, saya ingin bertanya.",
+  tg     : "Scalper_syariah",
+  ig     : "scalper_jfx",
+  email  : "jpxrealtrad@gmail.com"
+};
+/* ════════════ AKHIR KONFIGURASI ════════════ */
+
+document.body.classList.add(KONFIG.tataLetakHp === 'samping' ? 'hp-samping' : 'hp-tumpuk');
+
+/* ---------- tilt + spotlight: hanya perangkat ber-mouse ---------- */
+if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.querySelectorAll('.panel').forEach(p => {
+    p.addEventListener('mousemove', e => {
+      const r = p.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      p.style.setProperty('--mx', px * 100 + '%');
+      p.style.setProperty('--my', py * 100 + '%');
+      p.style.transform = `perspective(900px) rotateX(${(py - .5) * -7}deg) rotateY(${(px - .5) * 7}deg)`;
+    });
+    p.addEventListener('mouseleave', () => { p.style.transform = ''; });
+  });
+}
+
+/* ---------- sparkline hidup di tiap panel ---------- */
+function buatSpark(cv, warna) {
+  const ctx = cv.getContext('2d');
+  const N = 46;
+  let w = 0, h = 0, data = [], off = 0, last = 0;
+
+  const langkahBaru = v => {
+    let n = v + (Math.random() - .5) * .26;
+    return Math.min(.9, Math.max(.1, n));
+  };
+  for (let i = 0; i < N; i++) data.push(langkahBaru(.5));
+
+  function ukur() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = cv.clientWidth; h = cv.clientHeight;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  ukur();
+  addEventListener('resize', ukur);
+  addEventListener('orientationchange', () => setTimeout(ukur, 200));
+
+  function frame(t) {
+    const dt = Math.min(50, t - last); last = t;
+    if (w > 0) {
+      const step = w / (N - 3);
+      off += dt * .014;
+      while (off >= step) {
+        off -= step;
+        data.push(langkahBaru(data[data.length - 1]));
+        data.shift();
+      }
+      ctx.clearRect(0, 0, w, h);
+
+      let mn = Math.min(...data), mx = Math.max(...data), rg = (mx - mn) || 1;
+      const X = i => i * step - off;
+      const Y = v => h - 5 - ((v - mn) / rg) * (h - 12);
+
+      ctx.beginPath();
+      ctx.moveTo(X(0), Y(data[0]));
+      for (let i = 1; i < N; i++) ctx.lineTo(X(i), Y(data[i]));
+      ctx.lineTo(X(N - 1), h); ctx.lineTo(X(0), h); ctx.closePath();
+      ctx.globalAlpha = .09; ctx.fillStyle = warna; ctx.fill();
+      ctx.globalAlpha = 1;
+
+      ctx.beginPath();
+      ctx.moveTo(X(0), Y(data[0]));
+      for (let i = 1; i < N; i++) ctx.lineTo(X(i), Y(data[i]));
+      ctx.strokeStyle = warna; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(X(N - 1), Y(data[N - 1]), 2.6, 0, Math.PI * 2);
+      ctx.shadowBlur = 9; ctx.shadowColor = warna;
+      ctx.fillStyle = warna; ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+buatSpark(document.querySelectorAll('.spark')[0], '#FFC400');
+buatSpark(document.querySelectorAll('.spark')[1], '#2E9BFF');
+</script>
+</body>
+</html>
